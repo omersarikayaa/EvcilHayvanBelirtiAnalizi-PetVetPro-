@@ -1,0 +1,79 @@
+﻿@model dynamic
+@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <a href="/Home/Bloglar" class="btn btn-sm mb-4" style="color: #ba2d81;">← Listeye Dön</a>
+
+            <div class="card border-0 shadow-lg mb-5" style="border-radius: 25px; overflow: hidden;">
+                <img src="/images/blog/@Model.GorselYolu" class="w-100" style="height: 400px; object-fit: cover;" onerror="this.src='/images/blog/default-blog.jpg'">
+
+                <div class="card-body p-5">
+                    <h1 class="font-weight-bold mb-3" style="color: #00234b;">@Model.Baslik</h1>
+                    <div class="text-muted mb-4 small">
+                        <span><i class="fas fa-user"></i> @Model.Yazar</span> |
+                        <span><i class="fas fa-calendar"></i> @Model.Tarih.ToString("dd.MM.yyyy")</span> |
+                        <span><i class="fas fa-heart text-danger"></i> @Model.BegeniSayisi Beğeni</span>
+                    </div>
+                    <div style="line-height: 1.8; font-size: 1.15rem; text-align: justify; color: #444;">
+                        @Html.Raw(Model.Icerik.Replace("\n", "<br>"))
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-5">
+            <h4 class="font-weight-bold mb-4" style="color: #ba2d81;">💬 Yorumlar (@(ViewBag.Yorumlar != null ? ViewBag.Yorumlar.Count : 0))</h4>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="card p-4 border-0 shadow-sm mb-5" style="border-radius: 20px; background: #fffafc;">
+                    <form action="/Home/YorumEkle" method="post">
+                        <input type="hidden" name="BlogId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <p class="small text-muted"><strong>@User.Identity.Name</strong> olarak yazıyorsunuz...</p>
+                            <textarea name="YorumMetni" class="form-control" rows="3" style="border-radius: 15px;" placeholder="Yorumunuzu veya cevabınızı buraya bırakın..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn text-white px-5 rounded-pill" style="background: #ba2d81;">
+                            @(User.IsInRole("Veteriner") ? "Cevabı Yayınla 🩺" : "Yorumu Yayınla 🚀")
+                        </button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-light text-center border-0 shadow-sm p-4 mb-5" style="border-radius: 20px; background: #f8f9fa;">
+                    <p class="mb-2 text-muted">Yorum yapabilmek için üye olmanız veya giriş yapmanız gerekmektedir.</p>
+                    <a href="/Account/Login" class="btn btn-sm text-white rounded-pill px-4" style="background: #ba2d81;">Giriş Yap</a>
+                </div>
+            }
+
+            <div class="yorum-listesi">
+                @if (ViewBag.Yorumlar != null)
+                {
+                    foreach (var yorum in ViewBag.Yorumlar)
+                    {
+                        // Veteriner kontrolü
+                        bool isVet = yorum.Kullanici.Contains("Veteriner Hekim");
+
+                        <div class="p-4 mb-3 shadow-sm" style="border-radius: 20px; @(isVet ? "background: #e3f2fd; border-left: 8px solid #007bff;" : "background: #fff; border-left: 8px solid #ba2d81;")">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong style="color: @(isVet ? "#0056b3" : "#00234b");">
+                                    @if (isVet)
+                                    {
+                                        <i class="fas fa-user-md mr-1"></i>
+                                    }
+                    @yorum.Kullanici
+                                </strong>
+                                <small class="text-muted">@yorum.Tarih.ToString("dd.MM.yyyy HH:mm")</small>
+                            </div>
+                            <p class="mb-0 @(isVet ? "text-dark" : "text-secondary")">@yorum.Metin</p>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0" style="border-radius: 25px; border-top: 8px solid #ba2d81 !important; margin-top: 50px;">
+                <div class="card-body p-5 text-center">
+                    <h3 class="font-weight-bold mb-3" style="color: #ba2d81;">Yeni Şifre Belirle</h3>
+                    <p class="small text-muted mb-4">Gmail üzerinden gelen talebiniz doğrulandı. Lütfen yeni şifrenizi giriniz.</p>
+
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger rounded-pill small mb-4 shadow-sm" style="border: none; background-color: #f8d7da; color: #721c24; padding: 10px 15px;">
+                            ❌ @ViewBag.Hata
+                        </div>
+                    }
+
+                    <form action="/Account/SifreGuncelle" method="post">
+                        @* Gmail linkinden gelen Email bilgisini burada saklıyoruz *@
+                        <input type="hidden" name="Email" value="@ViewBag.Email">
+
+                        <div class="form-group mb-3">
+                            <input type="password" name="YeniSifre" class="form-control rounded-pill border-2" placeholder="Yeni Şifre" required style="padding: 12px 20px;">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <input type="password" name="YeniSifreTekrar" class="form-control rounded-pill border-2" placeholder="Yeni Şifre Tekrar" required style="padding: 12px 20px;">
+                        </div>
+
+                        <button type="submit" class="btn w-100 text-white font-weight-bold shadow" style="background: #ba2d81; border-radius: 35px; padding: 12px; border: none;">
+                            ŞİFREYİ GÜNCELLE →
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

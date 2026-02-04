@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0" style="border-radius: 25px; border-top: 8px solid #ba2d81 !important;">
+                <div class="card-body p-5">
+                    <h3 class="text-center font-weight-bold mb-4" style="color: #ba2d81;">PetVetPro Kayıt</h3>
+
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger rounded-pill small text-center mb-4" style="color: #721c24; background-color: #f8d7da; border: none;">
+                            ❌ @ViewBag.Hata
+                        </div>
+                    }
+
+                    <form action="/Account/Register" method="post" enctype="multipart/form-data">
+                        <input type="text" name="KullaniciAdi" class="form-control rounded-pill mb-3" placeholder="Kullanıcı Adı" required style="padding: 12px 20px;">
+                        <input type="email" name="Email" class="form-control rounded-pill mb-3" placeholder="E-posta Adresiniz" required style="padding: 12px 20px;">
+                        <input type="password" name="Sifre" class="form-control rounded-pill mb-3" placeholder="Şifre" required style="padding: 12px 20px;">
+                        <input type="password" name="SifreTekrar" class="form-control rounded-pill mb-3" placeholder="Şifre Tekrar" required style="padding: 12px 20px;">
+
+                        <label class="small font-weight-bold ml-2">Hesap Türü</label>
+                        <select name="Rol" id="rolSecimi" class="form-control rounded-pill mb-3" onchange="belgeGoster()" style="padding: 0 20px;">
+                            <option value="Kullanici">Evcil Hayvan Sahibi</option>
+                            <option value="Veteriner">Veteriner Hekim</option>
+                        </select>
+
+                        <div id="belgeAlani" style="display: none;" class="mb-4 p-3 bg-light rounded border">
+                            <label class="small font-weight-bold text-danger">🎓 Mezuniyet Belgesi (PDF/JPG)</label>
+                            <p class="xsmall text-muted mb-2" style="font-size: 11px;">Not: Veteriner hesapları yönetici onayından sonra aktifleşir.</p>
+                            <input type="file" name="MezuniyetBelgesi" class="form-control-file mt-2">
+                        </div>
+
+                        <button type="submit" class="btn w-100 text-white font-weight-bold shadow" style="background: #ba2d81; border-radius: 35px; padding: 12px; border: none;">
+                            KAYIT OL →
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function belgeGoster() {
+        var rol = document.getElementById("rolSecimi").value;
+        var belgeAlani = document.getElementById("belgeAlani");
+        belgeAlani.style.display = (rol === "Veteriner") ? "block" : "none";
+    }
+</script>

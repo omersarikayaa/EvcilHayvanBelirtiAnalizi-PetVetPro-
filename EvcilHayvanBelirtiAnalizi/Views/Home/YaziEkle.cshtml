@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0" style="border-radius: 25px; border-top: 8px solid #ba2d81 !important;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h3 class="font-weight-bold" style="color: #ba2d81;">Yeni Blog Yazısı Oluştur</h3>
+                        <p class="text-muted">Bilgi birikiminizi evcil hayvan sahipleriyle paylaşın.</p>
+                    </div>
+
+                    <form action="/Home/YaziEkle" method="post" enctype="multipart/form-data">
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold ml-2">Yazı Başlığı</label>
+                            <input type="text" name="Baslik" class="form-control rounded-pill border-2" placeholder="Örn: Yavru Kedilerde Aşı Takvimi" required style="padding: 12px 20px;">
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold ml-2">Yazı Görseli</label>
+                            <div class="custom-file">
+                                <input type="file" name="Gorsel" class="form-control-file p-2 border rounded-pill w-100" accept="image/*" required>
+                            </div>
+                            <small class="text-muted ml-2">En iyi sonuç için yatay görseller tercih edin.</small>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="small font-weight-bold ml-2">Yazı İçeriği</label>
+                            <textarea name="Icerik" class="form-control border-2" rows="10" placeholder="Yazınızı buraya detaylıca yazabilirsiniz..." style="border-radius: 20px; padding: 20px;" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn w-100 text-white font-weight-bold shadow-lg" style="background: #ba2d81; border-radius: 35px; padding: 15px; border: none; font-size: 1.1rem;">
+                            YAZIYI YAYINLA 🚀
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <a href="/Home/Bloglar" class="text-muted small" style="text-decoration: none;">← Vazgeç ve Geri Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

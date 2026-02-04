@@ -1,0 +1,81 @@
+﻿@model IEnumerable<dynamic>
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    /* Kartların üzerine gelince hafif büyüme efekti */
+    .blog-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(186, 45, 129, 0.1) !important;
+    }
+
+    .btn-outline-pink {
+        border: 2px solid #ba2d81;
+        color: #ba2d81;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .btn-outline-pink:hover {
+            background: #ba2d81;
+            color: white;
+        }
+</style>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="font-weight-bold" style="color: #ba2d81;">🐾 Veteriner Köşesi</h2>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a href="/Home/YaziEkle" class="btn text-white shadow-sm" style="background: #ba2d81; border-radius: 25px; padding: 10px 25px;">
+                <i class="fas fa-plus"></i> Yeni Yazı Paylaş
+            </a>
+        }
+    </div>
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var blog in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm blog-card" style="border-radius: 20px; overflow: hidden; transition: 0.3s;">
+                        @* RESİM YOLU DÜZELTİLDİ: /images/blog/ eklendi *@
+                        <img src="/images/blog/@blog.GorselYolu" class="card-img-top" style="height: 220px; object-fit: cover;" alt="Blog Görseli" onerror="this.src='/images/default-blog.jpg'">
+
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge" style="background: #fce4ec; color: #ba2d81; padding: 8px 12px; border-radius: 10px;">
+                                    <i class="fas fa-user-md mr-1"></i> @blog.Yazar
+                                </span>
+                                <small class="text-muted"><i class="far fa-calendar-alt mr-1"></i> @blog.Tarih.ToString("dd.MM.yyyy")</small>
+                            </div>
+
+                            <h5 class="card-title font-weight-bold" style="color: #00234b;">@blog.Baslik</h5>
+
+                            @* İÇERİK KISALTILDI: Kartın boyutu bozulmasın diye *@
+                            <p class="card-text text-muted small">
+                                @(blog.Icerik.Length > 120 ? blog.Icerik.Substring(0, 120) + "..." : blog.Icerik)
+                            </p>
+                        </div>
+
+                        <div class="card-footer bg-white border-0 pb-4 px-4">
+                            @* BUTON: HomeController'daki BlogDetay metoduna bağlı *@
+                            <a href="/Home/Bloglar_detay/@blog.Id" class="btn btn-outline-pink rounded-pill w-100 py-2">
+                                Devamını Oku <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5 shadow-sm bg-white rounded" style="border-radius: 20px;">
+                <img src="/images/empty-blog.png" style="width: 150px; opacity: 0.5;" class="mb-3">
+                <p class="text-muted font-italic">Henüz paylaşılmış bir yazı bulunmuyor. İlk yazıyı sen paylaş!</p>
+            </div>
+        }
+    </div>
+</div>

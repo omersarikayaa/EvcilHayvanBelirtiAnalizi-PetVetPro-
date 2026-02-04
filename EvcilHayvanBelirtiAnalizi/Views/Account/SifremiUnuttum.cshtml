@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0" style="border-radius: 25px; border-top: 8px solid #ba2d81 !important; margin-top: 50px;">
+                <div class="card-body p-5 text-center">
+                    <h3 class="font-weight-bold mb-3" style="color: #ba2d81;">Şifre Kurtarma</h3>
+                    <p class="small text-muted mb-4">Sistemde kayıtlı e-posta adresinizi girin, size Gmail üzerinden bir yenileme linki gönderelim.</p>
+
+                    @* Başarı Mesajı: Gmail gönderimi başarılı olduğunda burası yanar *@
+                    @if (ViewBag.Mesaj != null)
+                    {
+                        <div class="alert alert-success rounded-pill small mb-4 shadow-sm" style="border: none; background-color: #d4edda; color: #155724; padding: 10px 15px;">
+                            ✅ @ViewBag.Mesaj
+                        </div>
+                    }
+
+                    @* Hata Mesajı: SMTP veya Gmail bağlantı hatası olursa burası yanar *@
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger rounded-pill small mb-4 shadow-sm" style="border: none; background-color: #f8d7da; color: #721c24; padding: 10px 15px;">
+                            ❌ @ViewBag.Hata
+                        </div>
+                    }
+
+                    <form action="/Account/SifremiUnuttum" method="post">
+                        <div class="form-group mb-4">
+                            <input type="email" name="Email" class="form-control rounded-pill border-2" placeholder="E-posta Adresiniz" required style="padding: 12px 20px;">
+                        </div>
+
+                        <button type="submit" class="btn w-100 text-white font-weight-bold shadow" style="background: #ba2d81; border-radius: 35px; padding: 12px; border: none;">
+                            TALİMAT GÖNDER →
+                        </button>
+                    </form>
+
+                    <div class="mt-4">
+                        <a href="/Account/Login" class="small text-muted" style="text-decoration: none; font-weight: bold;">
+                            <i class="fas fa-arrow-left"></i> ← Giriş Sayfasına Dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

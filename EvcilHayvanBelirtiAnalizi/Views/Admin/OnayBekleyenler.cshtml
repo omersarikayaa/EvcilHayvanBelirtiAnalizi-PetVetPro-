@@ -1,0 +1,66 @@
+﻿@model IEnumerable<dynamic>
+@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="font-weight-bold" style="color: #ba2d81;">🛡️ Veteriner Onay Paneli</h2>
+        <p class="text-muted">Kayıt olan veterinerlerin belgelerini inceleyip onay verebilirsiniz.</p>
+    </div>
+
+    <div class="card shadow-lg border-0" style="border-radius: 20px;">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead style="background: #fce4ec; color: #ba2d81;">
+                        <tr>
+                            <th class="border-0 px-4 py-3">Veteriner Adı</th>
+                            <th class="border-0 py-3">E-posta</th>
+                            <th class="border-0 py-3 text-center">Mezuniyet Belgesi</th>
+                            <th class="border-0 py-3 text-center">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="px-4 py-3 align-middle font-weight-bold">@item.Ad</td>
+                                    <td class="py-3 align-middle">@item.Email</td>
+                                    <td class="py-3 align-middle text-center">
+                                        @if (!string.IsNullOrEmpty(item.Belge))
+                                        {
+                                            <a href="@item.Belge" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3">
+                                                <i class="fas fa-file-pdf"></i> Belgeyi İncele
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">Belge Yok</span>
+                                        }
+                                    </td>
+                                    <td class="py-3 align-middle text-center">
+                                        <form asp-action="VeterinerOnayla" asp-controller="Admin" method="post" style="display:inline;">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-success btn-sm rounded-pill px-4 shadow-sm">
+                                                Onayla ✅
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">Bekleyen onay talebi bulunmamaktadır.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

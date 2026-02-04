@@ -1,0 +1,232 @@
+﻿@model dynamic
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    /* 1. EKRAN VE GENEL DÜZEN */
+    .report-container {
+        max-width: 1500px !important;
+        margin: 20px auto;
+        padding: 0 40px;
+    }
+
+    /* PDF AYARI: PetVetPro yazısı sadece PDF'te çıkar */
+    .print-only-branding {
+        display: none;
+        text-align: center;
+        font-weight: bold;
+        color: #444;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #ba2d81;
+        padding-bottom: 10px;
+        font-size: 16px;
+    }
+
+    @("@media") print {
+        @("@page")
+
+    {
+        margin: 0.5cm !important;
+    }
+
+    .print-only-branding {
+        display: block !important;
+    }
+
+    nav, footer, header, .no-print, .email-action-card, button, .btn {
+        display: none !important;
+    }
+
+    .report-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .col-lg-9 {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    body {
+        background: white !important;
+        font-size: 11pt !important;
+    }
+
+    }
+
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* PET KİMLİK KARTI */
+    .pet-info-badge {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 15px 30px;
+        width: fit-content;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .badge-info-line {
+        color: #444;
+        font-size: 1.15rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* KIRMIZI UYARI KUTUSU */
+    .emergency-note-box {
+        background: #fff5f5;
+        border-radius: 10px;
+        padding: 18px 25px;
+        border-left: 8px solid #d9534f;
+        margin-top: 30px;
+        color: #b94a48;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(217, 83, 79, 0.1);
+    }
+
+    .report-step-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 12px 18px;
+        margin-bottom: 8px;
+        background: #ffffff;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .question-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 18px;
+        margin-bottom: 6px;
+        background: #fffdf5;
+        border-radius: 6px;
+        border-left: 5px solid #ffc107;
+    }
+</style>
+
+<div class="report-container container-fluid">
+    <div class="print-only-branding">PetVetPro - Profesyonel Hayvan Sağlık Analizi</div>
+
+    <div class="row">
+        <div class="col-lg-9">
+            @{
+                // MODEL VERİLERİNİ KULLANIYORUZ
+                var pType = Model.PetTuru;
+                var pName = Model.PetAdi ?? "Dostumuz";
+                var pNeutered = Model.Kisir;
+                var pAge = Model.Yas ?? "Yetişkin";
+                var pGender = Model.Cinsiyet;
+
+                var kisirMetni = (pNeutered == "Evet") ? "Kısır" : "Kısır Değil";
+                var imgPath = pType == "Kopek" ? "dog (4).png" : "cat (1).png";
+
+                var genderDisplay = (pGender == "Erkek")
+                ? "Erkek <i class='fas fa-mars' style='color:#007bff;'></i>"
+                : "Dişi <i class='fas fa-venus' style='color:#e83e8c;'></i>";
+            }
+
+            <div class="pet-info-badge shadow-sm">
+                <img src="/images/@imgPath" width="60" class="mr-4">
+                <div class="badge-content">
+                    <strong class="d-block" style="font-size: 1.4rem; color: #ba2d81; margin-bottom: 2px;">@pName Analiz Raporu</strong>
+                    <div class="badge-info-line">
+                        @pType | @pAge | @kisirMetni | @Html.Raw(genderDisplay)
+                    </div>
+                </div>
+            </div>
+
+            <h1 style="font-size: 2.3rem; margin-top: 25px; color:#00234b; font-weight:bold;">@pName - @ViewBag.RaporBasligi</h1>
+
+            <div class="emergency-alert-banner shadow-sm" style="background:#fff; border-radius:8px; padding:15px; border-left:10px solid @ViewBag.Renk; margin-bottom:20px;">
+                <strong style="font-size: 1.4rem; color:@ViewBag.Renk">
+                    @(ViewBag.Renk == "#B71C1C" || ViewBag.Renk == "#8B0000" ? "ACİL KLİNİK MÜDAHALE GEREKLİ!" : "HEKİM KONTROLÜ ÖNERİLİR")
+                </strong>
+            </div>
+
+            <div class="report-body-text shadow-sm mb-4" style="background:#fff; padding:30px; border-radius:12px; border:1px solid #eee;">
+                <h5 class="font-weight-bold text-dark mb-3 border-bottom pb-2">Tıbbi Değerlendirme</h5>
+                @{
+                    // SORU İŞARETLERİNİ VE BOŞLUKLARI TEMİZLEYEN MANTIK
+                    string temizAnaliz = ViewBag.TibbiAnaliz?.ToString() ?? "";
+                    temizAnaliz = temizAnaliz.Trim().TrimStart('?', ' ');
+                }
+                <p style="font-size: 1.1rem; line-height: 1.7; text-align: justify; color: #333;">@temizAnaliz</p>
+            </div>
+
+            <h4 style="color:#00234b; font-weight:bold; margin-bottom:15px;">Klinik Süreçte Sizi Ne Bekliyor?</h4>
+            <div class="report-step-list mb-4">
+                @if (ViewBag.Adimlar != null)
+                {
+                    foreach (var adim in ViewBag.Adimlar)
+                    {
+                        // Sadece içi dolu olan satırları göster, boşlukları ve sembolleri temizle
+                        string temizAdim = adim.ToString().Replace("•", "").Trim();
+                        if (!string.IsNullOrWhiteSpace(temizAdim))
+                        {
+                            <div class="report-step-item shadow-sm">
+                                <i class="fas fa-check-circle mr-3" style="color:#ba2d81; margin-top:5px; font-size: 1.2rem;"></i>
+                                <span style="font-size: 1.05rem;">@temizAdim</span>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <h4 style="color:#00234b; font-weight:bold; margin-top:30px; margin-bottom:15px;">Veteriner Hekiminize Sorun</h4>
+            <div class="question-list mb-4">
+                @if (ViewBag.Sorular != null)
+                {
+                    foreach (var soru in ViewBag.Sorular)
+                    {
+                        // Boş soruları ve soru işaretlerini temizle
+                        string temizSoru = soru.ToString().Replace("•", "").Trim().TrimStart('?');
+                        if (!string.IsNullOrWhiteSpace(temizSoru))
+                        {
+                            <div class="question-item shadow-sm">
+                                <i class="fas fa-comment-dots" style="color:#ffc107; margin-right:15px; font-size: 1.1rem;"></i>
+                                <span style="font-style:italic; font-size: 1rem; color: #333;">"@temizSoru"</span>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <div class="emergency-note-box shadow-sm">
+                <i class="fas fa-exclamation-triangle mr-3" style="font-size: 1.5rem;"></i>
+                <div>
+                    <strong style="display: block;">@pName İçin Önemli Not:</strong>
+                    <span>Bu rapor profesyonel veteriner verileriyle hazırlanmış bir ön bilgilendirmedir. Kesin muayene yerine geçmez.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 no-print">
+            <div class="email-action-card bg-white p-4 shadow-sm border rounded text-center" style="position: sticky; top: 100px;">
+                <h5 class="font-weight-bold mb-3">Raporu Kaydet</h5>
+                <button class="btn btn-primary btn-block rounded-pill mb-4 shadow" onclick="window.print()">
+                    <i class="fas fa-file-pdf mr-2"></i> PDF OLARAK İNDİR
+                </button>
+                <div class="form-group text-left mt-5">
+                    <label class="small font-weight-bold">E-posta Adresi:</label>
+                    <input type="email" class="form-control" placeholder="veteriner@adres.com">
+                </div>
+                <button class="btn btn-dark btn-block rounded-pill mt-5 shadow-sm">GÖNDER</button>
+            </div>
+        </div>
+    </div>
+</div>

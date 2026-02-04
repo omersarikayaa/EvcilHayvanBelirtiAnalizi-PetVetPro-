@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg border-0" style="border-radius: 25px; border-top: 8px solid #ba2d81 !important; margin-top: 50px;">
+                <div class="card-body p-5 text-center">
+                    <h3 class="font-weight-bold mb-4" style="color: #ba2d81;">PetVetPro Giriş</h3>
+
+                    @* Şifre sıfırlama veya başarılı işlemler sonrası gelen mesaj *@
+                    @if (TempData["Mesaj"] != null)
+                    {
+                        <div class="alert alert-success rounded-pill small mb-4" style="color: #155724; background-color: #d4edda; border: none; padding: 10px 15px;">
+                            ✅ @TempData["Mesaj"]
+                        </div>
+                    }
+
+                    @* Hatalı giriş veya onaylanmamış veteriner uyarısı *@
+                    @if (ViewBag.Hata != null)
+                    {
+                        <div class="alert alert-danger rounded-pill small mb-4" style="color: #721c24; background-color: #f8d7da; border: none; padding: 10px 15px;">
+                            ❌ @ViewBag.Hata
+                        </div>
+                    }
+
+                    <form action="/Account/Login" method="post">
+                        <div class="form-group mb-3">
+                            <input type="text" name="KullaniciAdi" class="form-control rounded-pill border-2" placeholder="Kullanıcı Adı veya E-posta" required style="padding: 12px 20px;">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <input type="password" name="Password" class="form-control rounded-pill border-2" placeholder="Şifre" required style="padding: 12px 20px;">
+                        </div>
+
+                        <div class="text-right mb-4">
+                            @* Gmail üzerinden link gönderilecek olan sayfa *@
+                            <a href="/Account/SifremiUnuttum" class="small" style="color: #ba2d81; text-decoration: none; font-weight: bold;">Şifremi mi Unuttum?</a>
+                        </div>
+
+                        <button type="submit" class="btn w-100 text-white font-weight-bold shadow" style="background: #ba2d81; border-radius: 35px; padding: 12px; border: none;">
+                            GİRİŞ YAP →
+                        </button>
+                    </form>
+
+                    <div class="mt-4">
+                        <p class="small text-muted">Henüz hesabınız yok mu? <a href="/Account/Register" style="color: #ba2d81; text-decoration: none; font-weight: bold;">Hemen Kayıt Ol</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

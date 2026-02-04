@@ -1,0 +1,354 @@
+﻿@model dynamic
+
+<style>
+    /* 1. TÜM ÖZEL TASARIMIN KORUNDU */
+    .promo-banner {
+        background: #ba2d81;
+        color: white;
+        padding: 10px 0;
+        font-weight: bold;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    #hero-section {
+        height: 450px;
+        background-size: cover;
+        background-position: center;
+        transition: background-image 2s ease-in-out;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+    }
+
+    .hero-box {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 0 30px 30px 0;
+        border-left: 10px solid #ba2d81;
+        max-width: 550px;
+    }
+
+    /* REKLAM ALANLARI - DAHA PROFESYONEL VE KÜÇÜK */
+    .ad-sidebar {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .ad-horizontal {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        margin: 30px 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .main-form-card {
+        background: white;
+        padding: 50px;
+        border-radius: 15px;
+        border: 1px solid #eee;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        margin-bottom: 50px;
+    }
+
+    .stepper-ui {
+        display: flex;
+        justify-content: space-around;
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        margin-bottom: 25px;
+    }
+
+    .step-dot {
+        color: #ccc;
+        transition: 0.3s;
+        text-align: center;
+    }
+
+        .step-dot.active {
+            color: #ba2d81;
+            font-weight: bold;
+        }
+
+    /* BUTONLAR VE KARTLAR */
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .detail-btns {
+        display: flex;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        overflow: hidden;
+        min-width: 160px;
+    }
+
+    .detail-btn {
+        border: none;
+        padding: 10px 22px;
+        background: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: 600;
+        flex: 1;
+    }
+
+        .detail-btn.active-yes {
+            background: #ba2d81 !important;
+            color: #fff !important;
+        }
+
+        .detail-btn.active-no {
+            background: #6c757d !important;
+            color: #fff !important;
+        }
+
+    .pet-card-select {
+        border: 2px solid #eee;
+        cursor: pointer;
+        transition: 0.3s;
+        border-radius: 15px;
+        background: #fff;
+        text-align: center;
+    }
+
+        .pet-card-select img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+    .pet-radio:checked + .pet-card-select {
+        border-color: #ba2d81;
+        background: #fff5fb;
+    }
+
+    .question-option {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        text-align: center;
+    }
+
+    .q-radio:checked + .question-option {
+        border: 2px solid #ba2d81 !important;
+        background-color: #fff5fb;
+    }
+</style>
+
+<div class="promo-banner no-print">
+    <marquee scrollamount="10">🐾 PetVetPro Profesyonel Analiz Sistemi - Evcil Dostunuzun Sağlığı Bizim İçin Önemli! - 7/24 Hızlı Destek 🐾</marquee>
+</div>
+
+<div id="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="hero-box shadow-lg">
+            <h1 class="font-weight-bold">Hoş Geldiniz.</h1>
+            <p>Evcil hayvanınızın sağlığını profesyonel verilerle analiz edin.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-n5 position-relative" style="z-index: 10;">
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="main-form-card shadow bg-white">
+                <div class="stepper-ui shadow-sm" id="main-stepper" style="display:none;">
+                    <div id="dot-info" class="step-dot active">●<br>Bilgiler</div>
+                    <div id="dot-symptom" class="step-dot">○<br>Ana Belirti</div>
+                    <div id="dot-detail" class="step-dot">○<br>Analiz</div>
+                </div>
+
+                <div id="step-1">
+                    <h3 class="text-center font-weight-bold mb-4">Semptom Belirleyici</h3>
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 text-center">
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <label class="w-100"><input type="radio" name="petType" value="Kopek" class="d-none pet-radio" checked><div class="p-4 pet-card-select border shadow-sm"><h5 class="mb-3">Köpek</h5><img src="/images/dog (4).png"></div></label>
+                                </div>
+                                <div class="col-6">
+                                    <label class="w-100"><input type="radio" name="petType" value="Kedi" class="d-none pet-radio"><div class="p-4 pet-card-select border shadow-sm"><h5 class="mb-3">Kedi</h5><img src="/images/cat (1).png"></div></label>
+                                </div>
+                            </div>
+                            <input type="text" id="petNameInput" class="form-control form-control-lg mb-4" placeholder="Dostunuzun ismini yazın...">
+                            <button type="button" onclick="anketeGec()" class="btn btn-lg btn-block text-white" style="background:#ba2d81; border-radius:35px; font-weight: bold;">DEVAM ET →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-2" style="display:none;">
+                    <div id="q-container-inner">
+                        <h4 class="text-center mb-4"><span class="pet-name-display"></span> Künyesi</h4>
+                        <div class="mx-auto" style="max-width: 600px;">
+                            <p class="font-weight-bold">Cinsiyet?</p>
+                            <label class="w-100"><input type="radio" name="gender" value="Erkek" class="d-none q-radio" onclick="showNext('q-age')"><div class="question-option shadow-sm p-3 mb-2 border rounded text-center">Erkek</div></label>
+                            <label class="w-100"><input type="radio" name="gender" value="Dişi" class="d-none q-radio" onclick="showNext('q-age')"><div class="question-option shadow-sm p-3 mb-2 border rounded text-center">Dişi</div></label>
+
+                            <div id="q-age" style="display:none;" class="mt-4 border-top pt-3">
+                                <p class="font-weight-bold">Yaş?</p>
+                                @* YAVRU (0-3) GÜNCELLEMESİ *@
+                                <label class="w-100"><input type="radio" name="age" value="Yavru (0-3)" class="d-none q-radio" onclick="showNext('q-neutered')"><div class="question-option shadow-sm text-center">Yavru (0-3)</div></label>
+                                <label class="w-100"><input type="radio" name="age" value="Yetişkin" class="d-none q-radio" onclick="showNext('q-neutered')"><div class="question-option shadow-sm text-center">Yetişkin</div></label>
+                            </div>
+
+                            <div id="q-neutered" style="display:none;" class="mt-4 border-top pt-3">
+                                <p class="font-weight-bold">Kısır mı?</p>
+                                <label class="w-100"><input type="radio" name="isNeutered" value="Evet" class="d-none q-radio" onclick="symptomAdiminaGec()"><div class="question-option shadow-sm text-center">Evet</div></label>
+                                <label class="w-100"><input type="radio" name="isNeutered" value="Hayır" class="d-none q-radio" onclick="symptomAdiminaGec()"><div class="question-option shadow-sm text-center">Hayır</div></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-symptom" style="display:none;" class="mt-4">
+                    <h4 class="text-center mb-4">Gözlemlenen Belirti</h4>
+                    <div class="mx-auto" style="max-width: 600px;">
+                        <select id="mainSymptom" class="form-control form-control-lg" style="border: 2px solid #ba2d81; border-radius: 12px;">
+                            <option value="" disabled selected>Belirti seçiniz...</option>
+                            @if (ViewBag.Belirtiler != null)
+                            {
+                                foreach (dynamic item in ViewBag.Belirtiler)
+                                {
+                                    <option value="@item.Id">@item.Ad</option>
+                                }
+                            }
+                        </select>
+                        <button type="button" onclick="detayAdiminaGec()" class="btn btn-block text-white mt-4 shadow" style="background-color: #ba2d81; border-radius: 40px; font-weight: bold;">DETAYLARI GÖR</button>
+                    </div>
+                </div>
+
+                <div id="step-details" style="display:none;" class="mt-4">
+                    <h4 class="text-center mb-3">Detaylı Sorular</h4>
+                    <div id="details-list" class="mx-auto" style="max-width: 650px;"></div>
+                    <button type="button" onclick="kaydetVeAnalizEt()" class="btn btn-block text-white mt-5 shadow" style="background-color: #ba2d81; border-radius: 40px; font-weight: bold;">SONUÇLARI GÖRÜNTÜLE →</button>
+                </div>
+            </div>
+
+            <div class="ad-horizontal shadow-sm">
+                <small class="text-muted d-block mb-1">Google Reklam</small>
+                <div style="background:#f1f1f1; height:90px; display:flex; align-items:center; justify-content:center; border:1px dashed #bbb;">
+                    <strong>728x90 Billboard Reklam Alanı</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="ad-sidebar">
+                <small class="text-muted d-block mb-3">SPONSOR</small>
+                <div style="background:#fafafa; height:400px; display:flex; align-items:center; justify-content:center; border:1px solid #eee; border-radius:8px;">
+                    <span class="text-muted">300x400 <br> Sky Banner</span>
+                </div>
+            </div>
+
+            <div class="card p-3 shadow-sm border-0 mb-4 bg-light">
+                <h6 class="font-weight-bold">Hekim Tavsiyesi</h6>
+                <small>Analiz sonuçları bir ön teşhistir. Lütfen hekiminize danışın.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-outer-frame shadow text-center">
+        <h6 class="font-weight-bold mb-4">📍 Bizi Ziyaret Edin (Kadıköy Boğa Heykeli)</h6>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.085350410408!2d29.02896561199321!3d40.990544571217684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab04eb8ba7b17%3A0xc13cd0993370cf84!2sKad%C4%B1k%C3%B6y%20Bo%C4%9Fa%20Heykeli!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str"
+                width="100%" height="350" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+</div>
+
+<script>
+    // RESİM DÖNGÜSÜ
+    const images = ["https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=2069", "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=2043"];
+    let currentIndex = 0;
+    setInterval(() => { currentIndex = (currentIndex + 1) % images.length; document.getElementById('hero-section').style.backgroundImage = `url('${images[currentIndex]}')`; }, 5000);
+
+    // STEPPER
+    function adimGuncelle(aktifAdimId, aktifNoktaId) {
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-symptom').style.display = 'none';
+        document.getElementById('step-details').style.display = 'none';
+        document.getElementById(aktifAdimId).style.display = 'block';
+        document.getElementById('main-stepper').style.display = 'flex';
+        document.querySelectorAll('.step-dot').forEach(dot => { dot.classList.remove('active'); dot.innerHTML = dot.innerHTML.replace('●', '○'); });
+        const activeDot = document.getElementById(aktifNoktaId);
+        activeDot.classList.add('active');
+        activeDot.innerHTML = activeDot.innerHTML.replace('○', '●');
+    }
+
+    function anketeGec() { const name = document.getElementById('petNameInput').value; document.querySelectorAll('.pet-name-display').forEach(x => x.innerText = name || "Dostumuz"); adimGuncelle('step-2', 'dot-info'); }
+    function showNext(id) { document.getElementById(id).style.display = 'block'; }
+    function symptomAdiminaGec() { adimGuncelle('step-symptom', 'dot-symptom'); }
+
+    function detayAdiminaGec() {
+        const sid = document.getElementById('mainSymptom').value;
+        if(!sid) return alert("Belirti seçin!");
+        fetch(`/Home/GetBelirtiDetaylari?belirtiId=${sid}`).then(r => r.json()).then(data => {
+            const list = document.getElementById('details-list');
+            list.innerHTML = '';
+            data.forEach((item, index) => {
+                list.innerHTML += `<div class="detail-row"><span class="detail-text font-weight-bold">${index + 1}. ${item}</span>
+                    <div class="detail-btns shadow-sm" id="group-${index}">
+                        <button type="button" class="detail-btn btn-yes" onclick="selectDetail(${index}, 'yes')">Evet</button>
+                        <button type="button" class="detail-btn btn-no active-no" onclick="selectDetail(${index}, 'no')">Hayır</button>
+                    </div></div>`;
+            });
+            adimGuncelle('step-details', 'dot-detail');
+        });
+    }
+
+    function selectDetail(idx, choice) {
+        const g = document.getElementById(`group-${idx}`);
+        g.querySelectorAll('.detail-btn').forEach(b => b.classList.remove('active-yes', 'active-no'));
+        if(choice === 'yes') g.querySelector('.btn-yes').classList.add('active-yes');
+        else g.querySelector('.btn-no').classList.add('active-no');
+    }
+
+    function kaydetVeAnalizEt() {
+        const symptomId = document.getElementById('mainSymptom').value;
+        const petName = document.getElementById('petNameInput').value || "Dostumuz";
+        const petType = document.querySelector('input[name="petType"]:checked')?.value || "Kopek";
+        const age = document.querySelector('input[name="age"]:checked')?.value || "Yetişkin";
+        const gender = document.querySelector('input[name="gender"]:checked')?.value || "Erkek";
+        const neutered = document.querySelector('input[name="isNeutered"]:checked')?.value || "Hayır";
+        let secimler = [];
+        document.querySelectorAll('.detail-btns').forEach(group => { secimler.push(group.querySelector('.btn-yes').classList.contains('active-yes') ? "Evet" : "Hayır"); });
+        window.location.href = `/Home/Liste?belirtiId=${symptomId}&cevaplar=${secimler.join(',')}&petName=${encodeURIComponent(petName)}&petType=${petType}&isNeutered=${neutered}&age=${age}&gender=${gender}`;
+    }
+</script>
